@@ -52,6 +52,7 @@ A FastAPI-based REST API for course enrollment management with JWT authenticatio
 │   ├── test_courses.py          # Course tests
 │   └── test_enrollments.py      # Enrollment tests
 ├── alembic.ini                   # Alembic configuration
+├── start.sh                      # Startup script with migrations
 ├── requirements.txt              # Python dependencies
 └── README.md
 ```
@@ -112,3 +113,27 @@ pytest tests/ -v
 ```
 
 Tests use SQLite in-memory database for isolation.
+
+## Render Deployment
+
+### Quick Deploy
+
+1. Create PostgreSQL database on Render
+2. Create Web Service and link to database
+3. Environment variables are auto-set when database linked
+4. Render auto-deploys on push to `main` branch
+
+### Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string (auto-set via database linking) |
+| `SECRET_KEY` | JWT secret key for token signing |
+| `ALGORITHM` | JWT algorithm (default: HS256) |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Token expiration time (default: 30) |
+
+### Live API Endpoints
+
+- Swagger UI: `https://course-enrollment-platform-api-lpnu.onrender.com/docs`
+- ReDoc: `https://course-enrollment-platform-api-lpnu.onrender.com/redoc`
+- API Base: `https://course-enrollment-platform-api-lpnu.onrender.com/api/v1`
