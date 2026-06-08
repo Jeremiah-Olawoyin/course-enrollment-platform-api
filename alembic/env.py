@@ -19,11 +19,14 @@ from app.models import User, Course, Enrollment, EnrollmentAudit
 
 target_metadata = Base.metadata
 
+# Get DATABASE_URL from environment
+database_url = os.environ.get("DATABASE_URL")
+if not database_url:
+    raise RuntimeError("DATABASE_URL environment variable is not set")
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
-    # Use DATABASE_URL from environment instead of hardcoded value
-    url = os.environ.get("DATABASE_URL") or config.get_main_option("sqlalchemy.url")
+    url = database_url
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -37,12 +40,8 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
-    # Use DATABASE_URL from environment instead of hardcoded value
-    configuration = config.get_section(config.config_ini_section, default={})
-    configuration["sqlalchemy.url"] = os.environ.get("DATABASE_URL") or configuration.get("sqlalchemy.url")
-    
     connectable = engine_from_config(
-        configuration,
+        {"sqlalchemy.url": database_url},
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
