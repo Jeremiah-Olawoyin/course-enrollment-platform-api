@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 
 class Token(BaseModel):
@@ -21,10 +21,8 @@ class UserRead(BaseModel):
     email: str
     role: str
     is_active: bool
+    model_config = ConfigDict(from_attributes=True)
     
-    class Config:
-        from_attributes = True
-
 class UserReadWithEnrollments(UserRead):
     enrollments: list["EnrollmentRead"] = []
 
@@ -44,10 +42,8 @@ class CourseRead(BaseModel):
     code: str
     capacity: int
     is_active: bool
+    model_config = ConfigDict(from_attributes=True)
     
-    class Config:
-        from_attributes = True
-
 class EnrollmentCreate(BaseModel):
     course_id: int
 
@@ -56,10 +52,8 @@ class EnrollmentRead(BaseModel):
     user_id: int
     course_id: int
     created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
     
-    class Config:
-        from_attributes = True
-
 class EnrollmentReadWithDetails(EnrollmentRead):
     user: UserRead
     course: CourseRead
